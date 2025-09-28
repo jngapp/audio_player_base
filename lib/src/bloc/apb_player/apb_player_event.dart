@@ -9,7 +9,8 @@ abstract class ApbPlayerEvent extends Equatable {
 
 class ApbPlayPlaylistEvent extends ApbPlayerEvent {
   final ApbPlayablePlaylist playlist;
-  const ApbPlayPlaylistEvent(this.playlist);
+  final bool shuffle;
+  const ApbPlayPlaylistEvent(this.playlist, {this.shuffle = false});
 }
 class ApbPlayAudioEvent extends ApbPlayerEvent {
   final ApbPlayableAudio audio;
@@ -83,6 +84,14 @@ class ApbToggleLoopEvent extends ApbPlayerEvent {
 
 class ApbToggleShuffleEvent extends ApbPlayerEvent {
   const ApbToggleShuffleEvent();
+}
+
+
+class ApbSetShuffleModeEvent extends ApbPlayerEvent {
+  final bool enabled;
+  const ApbSetShuffleModeEvent(this.enabled);
+  @override
+  List<Object?> get props => [enabled];
 }
 
 class ApbInitStartUpEvent extends ApbPlayerEvent {

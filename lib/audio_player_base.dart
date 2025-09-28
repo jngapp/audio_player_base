@@ -1,6 +1,4 @@
 import 'dart:io';
-import 'package:audio_player_base/src/bloc/apb_player/apb_player_bloc.dart';
-import 'package:audio_player_base/src/bloc/apb_timer/apb_timer_cubit.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -20,6 +18,7 @@ export 'src/repository/repository.dart';
 export 'src/wrapper/wrapper.dart';
 export 'src/bloc_provider/bloc_provider.dart';
 export 'package:just_audio/just_audio.dart';
+export 'src/bloc/bloc.dart';
 
 typedef ApbAudioPositionTrackerCallback =
     void Function(String audioId, Duration position, Duration duration);
@@ -126,8 +125,8 @@ class AudioPlayerBase {
     GetIt.I<ApbPlayerBloc>().add(ApbPlayCustomSourceEvent(audio: audio, playlist: playlist));
   }
 
-  static void playPlaylist(ApbPlayablePlaylist playlist) {
-    GetIt.I<ApbPlayerBloc>().add(ApbPlayPlaylistEvent(playlist));
+  static void playPlaylist(ApbPlayablePlaylist playlist, {bool shouldShuffle = false}) {
+    GetIt.I<ApbPlayerBloc>().add(ApbPlayPlaylistEvent(playlist, shuffle: shouldShuffle));
   }
 
   static void pause() {
@@ -144,6 +143,13 @@ class AudioPlayerBase {
 
   static void resume() {
     GetIt.I<ApbPlayerBloc>().add(ApbResumeEvent());
+  }
+
+  static void setShuffleMode(bool enabled) {
+    GetIt.I<ApbPlayerBloc>().add(ApbSetShuffleModeEvent(enabled));
+  }
+  static void toggleShuffle() {
+    GetIt.I<ApbPlayerBloc>().add(ApbToggleShuffleEvent());
   }
 
   String get saveDirectory {

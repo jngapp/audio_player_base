@@ -22,11 +22,12 @@ class ApbSkipWidget extends StatelessWidget {
     return ApbPlayingOrNotStreamBuilder(
         defaultBuilder: (context) => disabledButton,
         playingBuilder: (context, psStream) {
-          return ApbCustomStreamBuilder<(Duration?, Duration?)>(
+          return ApbCustomStreamBuilder<ApbPlayerProgressState>(
               defaultBuilder: (context) => disabledButton,
-              stream: Rx.combineLatest2(psStream.positionStream, psStream.durationStream, (position, duration) => (position, duration)),
+              stream: psStream.progressStateStream,
               itemBuilder: (context, data) {
-                final (position, duration) = data;
+                final position = data.position;
+                final duration = data.duration;
                 return IconButton(onPressed: (){
                   context.read<ApbPlayerBloc>().add(ApbSkipEvent(position!, duration!, skipDuration));
                 }, icon: icon);

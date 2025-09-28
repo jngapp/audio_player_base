@@ -1,7 +1,13 @@
 import 'package:audio_player_base/audio_player_base.dart';
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:just_audio/just_audio.dart';
+import 'package:rxdart/rxdart.dart';
+
+class ApbPlayerProgressState {
+  final Duration? position;
+  final Duration? duration;
+  final double? progress;
+  const ApbPlayerProgressState({this.position, this.duration, this.progress});
+}
 
 class ApbPlayerStateStream {
   static ApbPlayerStateStream? _instance;
@@ -29,6 +35,12 @@ class ApbPlayerStateStream {
   Stream<bool> get hasPreviousStream => audioPlayer.hasPreviousStream;
   Stream<bool> get shuffleModeEnabledStream => audioPlayer.shuffleModeEnabledStream;
   Stream<List<int>> get shuffleIndicesStream => audioPlayer.shuffleIndicesStream;
+  Stream<ApbPlayerProgressState?> get progressStateStream => Rx.combineLatest2(positionStream, durationStream, (position, duration) {
+    if(duration == null) {
+      return ApbPlayerProgressState(duration: null, position: null, progress: null);
+    }
+    return ApbPlayerProgressState(duration: duration, position: position, progress: position.inSeconds/duration.inSeconds);
+  });
 }
 
 class ApbAudioPlayerHandler {
@@ -89,16 +101,13 @@ class ApbAudioPlayerHandler {
 
   Future<void> initPlaylist({required List<ApbPlayableAudio> audios}) async {
     for (final audio in audios) {
-      if(kDebugMode) {
-        // print('${AudioPlayerBase().saveDirectory}/${audio.filePath}');
-      }
       _playlist.add(audio);
     }
   }
 }
 
 Future<bool> hasNetwork() async {
-  return await checkUrlAvailability('https://example.com');
+  return await checkUrlAvailability('https://google.com');
 }
 
 Future<bool> checkUrlAvailability(String url) async {

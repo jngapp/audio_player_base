@@ -2,9 +2,6 @@ import 'package:audio_player_base/audio_player_base.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rxdart/rxdart.dart';
-
-import '../../bloc/apb_player/apb_player_bloc.dart';
 
 class ApbProgressWidget extends StatelessWidget {
   const ApbProgressWidget({
@@ -46,23 +43,15 @@ class ApbProgressWidget extends StatelessWidget {
         return defaultBuilder(context, audio?.progress ?? 0);
       },
       playingBuilder: (context, psStream, playlist, playingAudio) {
-        final child = ApbCustomStreamBuilder<(Duration?, Duration?)>(
+        final child = ApbCustomStreamBuilder<ApbPlayerProgressState>(
           defaultBuilder: (context) {
             return defaultBuilder(context, audio?.progress ?? 0);
           },
-          stream: Rx.combineLatest2(
-            psStream.positionStream,
-            psStream.durationStream,
-            (position, duration) => (position, duration),
-          ),
+          stream: psStream.progressStateStream,
           itemBuilder: (context, data) {
-            final (position, duration) = data;
-            double? progress;
-            if (duration == null || position == null) {
-              progress = null;
-            } else {
-              progress = position.inMilliseconds / duration.inMilliseconds;
-            }
+            final position = data.position;
+            final duration = data.duration;
+            final progress = data.progress;
             return playingBuilder(context, progress ?? 0, duration, position);
           },
         );

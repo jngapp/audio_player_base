@@ -130,36 +130,3 @@ class ApbPlayerWidgetBuilder extends StatelessWidget {
   }
 }
 
-//
-// class ApbFullPlayerBuilder extends StatelessWidget {
-//   const ApbFullPlayerBuilder({
-//     super.key,
-//     this.playButtonBuilder,
-//     this.pauseButtonBuilder,
-//     this.skipForwardButtonBuilder,
-//     this.skipBackwardButtonBuilder,
-//     this.shuffleButtonBuilder,
-//     this.speedButtonBuilder,
-//     this.loopButtonBuilder,
-//     this.timerButtonBuilder,
-//     this.nextButtonBuilder,
-//     this.prevButtonBuilder,
-//   });
-//
-//   final Widget? playButtonBuilder;
-//   final Widget? pauseButtonBuilder;
-//   final Widget? nextButtonBuilder;
-//   final Widget? prevButtonBuilder;
-//   final Widget Function(Duration duration)? skipForwardButtonBuilder;
-//   final Widget Function(Duration duration)? skipBackwardButtonBuilder;
-//   final Widget Function(bool enabled)? shuffleButtonBuilder;
-//   final Widget Function(double speed)? speedButtonBuilder;
-//   final Widget Function(bool enabled)? loopButtonBuilder;
-//   final Widget Function(ApbTimerConfig config, List<Duration> timerDurations)?
-//   timerButtonBuilder;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return const Placeholder();
-//   }
-// }

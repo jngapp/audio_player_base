@@ -36,6 +36,7 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
     on<ApbInitStartUpEvent>(_onInitStartUp);
     on<ApbAddAudioEvent>(_onAddAudio);
     on<ApbPlayCustomSourceEvent>(_onPlayCustomSource);
+    on<ApbSetShuffleModeEvent>(_onSetShuffleMode);
 
     add(ApbInitStartUpEvent());
   }
@@ -92,7 +93,7 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
     ApbPlayPlaylistEvent event,
     Emitter<ApbPlayerState> emit,
   ) async {
-    await _handlePlay(emit, playlist: event.playlist);
+    await _handlePlay(emit, playlist: event.playlist, shouldShuffle: event.shuffle);
   }
 
   Future<void> _onPlayAudio(
@@ -106,16 +107,23 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
     Emitter<ApbPlayerState> emit, {
     ApbPlayableAudio? audio,
     ApbPlayablePlaylist? playlist,
+    bool shouldShuffle = false,
   }) async {
     try {
       await _audioPlayerService.init();
-      _audioPlayerService.audioPlayer!.setShuffleModeEnabled(
-        state.shuffleModeEnabled,
-      );
+      if(shouldShuffle) {
+        await _audioPlayerService.audioPlayer!.setShuffleModeEnabled(true);
+      }
+      else {
+        _audioPlayerService.audioPlayer!.setShuffleModeEnabled(
+          state.shuffleModeEnabled,
+        );
+      }
       _audioPlayerService.audioPlayer!.setLoopMode(state.loopMode);
       _audioPlayerService.audioPlayer!.setSpeed(state.speed);
 
       final playerStream = _audioPlayerService.psStream!;
+      emit(state.copyWith(playerStream: playerStream));
       ApbPlayableAudio? selectedAudio;
       ApbPlayablePlaylist? selectedPlaylist;
       List<ApbPlayableAudio> tracks = [];
@@ -266,6 +274,13 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
       const Duration(seconds: 0),
       index: 0,
     );
+  }
+  Future<void> _onSetShuffleMode(
+      ApbSetShuffleModeEvent event,
+      Emitter<ApbPlayerState> emit,
+      ) async {
+    await _audioPlayerService.audioPlayer!.setShuffleModeEnabled(event.enabled);
+    emit(state.copyWith(shuffleModeEnabled: event.enabled));
   }
 
   @override
