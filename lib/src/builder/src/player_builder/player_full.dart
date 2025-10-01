@@ -160,9 +160,44 @@ class ApbFullPlayer extends StatelessWidget {
                                   MainAxisAlignment.spaceBetween,
                                   children: [
                                     if(playerBuilderConfig.speedButton != null) playerBuilderConfig.speedButton!,
-                                    if(playerBuilderConfig.timerButton != null) playerBuilderConfig.timerButton!,
                                     if(playerBuilderConfig.loopButton != null) playerBuilderConfig.loopButton!,
                                     if(playerBuilderConfig.shuffleButton != null) playerBuilderConfig.shuffleButton!,
+                                    if(playerBuilderConfig.timerButton != null) playerBuilderConfig.timerButton!,
+                                    if(playerBuilderConfig.queueBuilder != null)
+                                    IconButton(onPressed: (){
+                                      showModalBottomSheet(
+                                          context: context,
+                                          builder: (context) {
+                                            return Padding(
+                                              padding: const EdgeInsets
+                                                  .symmetric(horizontal: 15),
+                                              child: ApbActiveStreamBuilder(
+                                                  loadingBuilder: (context, psStream, loadingPlaylist, loadingAudio) {
+                                                    return playerBuilderConfig.queueBuilder!.loadingWidget(context, loadingPlaylist, loadingAudio);
+                                                  },
+                                                  defaultBuilder: (context) => playerBuilderConfig.queueBuilder!.defaultWidget(context),
+                                                  playingBuilder: (context, psStream, playingPlaylist, playingAudio) {
+                                                    final currentTracks = playingPlaylist.audios ?? [];
+                                                    return ApbCustomStreamBuilder<ApbShufflingState>(
+                                                        defaultBuilder: (context) => playerBuilderConfig.queueBuilder!.defaultWidget(context),
+                                                        stream: psStream.shufflingStateStream,
+                                                        itemBuilder: (context, shufflingState) {
+                                                          final List<ApbPlayableAudio> shuffledTracks = [];
+                                                          if(shufflingState.enabled) {
+                                                            for(int i = 0; i < currentTracks.length; i++) {
+                                                              shuffledTracks.add(currentTracks[shufflingState.indices[i]]);
+                                                            }
+                                                          }
+                                                          else {
+                                                            shuffledTracks.addAll(currentTracks);
+                                                          }
+                                                          return playerBuilderConfig.queueBuilder!.playingWidget(context, shuffledTracks, playingAudio);
+                                                        });
+                                                  },),
+                                            );
+                                          },
+                                          showDragHandle: true);
+                                    }, icon: playerBuilderConfig.queueBuilder!.queueIcon),
                                   ],
                                 ),
                               ],
@@ -182,3 +217,5 @@ class ApbFullPlayer extends StatelessWidget {
     );
   }
 }
+
+

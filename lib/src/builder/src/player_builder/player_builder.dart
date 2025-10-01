@@ -33,6 +33,20 @@ double getPixelFromPercentage(BuildContext context, double percent) {
   return MediaQuery.sizeOf(context).height * percent;
 }
 
+class ApbPlayerQueueBuilder {
+  final Icon queueIcon;
+  final Function(BuildContext context, ApbPlayablePlaylist loadingPlaylist, ApbPlayableAudio loadingAudio) loadingWidget;
+  final Function(BuildContext context) defaultWidget;
+  final Function(BuildContext context, List<
+      ApbPlayableAudio> tracksInQueue, ApbPlayableAudio playingTrack) playingWidget;
+
+  ApbPlayerQueueBuilder({
+    required this.queueIcon,
+    required this.loadingWidget,
+    required this.defaultWidget,
+    required this.playingWidget,});
+}
+
 class ApbPlayerBuilderConfig {
   final Widget playButton;
   final Widget resumeButton;
@@ -46,6 +60,7 @@ class ApbPlayerBuilderConfig {
   final Widget? loopButton;
   final Widget? speedButton;
   final Widget? timerButton;
+  final ApbPlayerQueueBuilder? queueBuilder;
   final Widget Function(BuildContext context, ApbPlayableAudio audio)?
   secondaryWidgetBuilder;
 
@@ -62,6 +77,7 @@ class ApbPlayerBuilderConfig {
     this.loopButton,
     this.speedButton,
     this.timerButton,
+    this.queueBuilder,
     this.secondaryWidgetBuilder,
   });
 }

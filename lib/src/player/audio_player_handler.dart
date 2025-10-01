@@ -9,6 +9,12 @@ class ApbPlayerProgressState {
   const ApbPlayerProgressState({this.position, this.duration, this.progress});
 }
 
+class ApbShufflingState {
+  final bool enabled;
+  final List<int> indices;
+  const ApbShufflingState({required this.enabled, required this.indices});
+}
+
 class ApbPlayerStateStream {
   static ApbPlayerStateStream? _instance;
   final AudioPlayer audioPlayer;
@@ -40,6 +46,10 @@ class ApbPlayerStateStream {
       return ApbPlayerProgressState(duration: null, position: null, progress: null);
     }
     return ApbPlayerProgressState(duration: duration, position: position, progress: position.inSeconds/duration.inSeconds);
+  });
+
+  Stream<ApbShufflingState> get shufflingStateStream => Rx.combineLatest2(shuffleModeEnabledStream, shuffleIndicesStream, (enabled, indices) {
+    return ApbShufflingState(enabled: enabled, indices: indices);
   });
 }
 
