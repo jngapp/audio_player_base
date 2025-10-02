@@ -6,7 +6,6 @@ import 'package:audio_player_base/src/builder/src/player_builder/draggable_scrol
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_just_marquee/flutter_just_marquee.dart';
-import '../../../bloc/apb_player/apb_player_bloc.dart';
 
 part 'player_mini.dart';
 
@@ -90,59 +89,6 @@ class ApbPlayerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ApbPlayerWidgetBuilder(
-      startUpBuilder: (context, audio) {
-        return ApbMiniPlayer(audio: audio);
-      },
-      loadingBuilder: (context, audio) {
-        return ApbMiniPlayer(audio: audio);
-      },
-      playingBuilder: (context, playlist, audio) {
-        return ApbScrollablePlayer(
-          playlist: playlist,
-          audio: audio,
-          playerBuilderConfig: builderConfig,
-        );
-      },
-    );
+    return ApbScrollablePlayer(playerBuilderConfig: builderConfig);
   }
 }
-
-class ApbPlayerWidgetBuilder extends StatelessWidget {
-  const ApbPlayerWidgetBuilder({
-    super.key,
-    required this.startUpBuilder,
-    required this.loadingBuilder,
-    required this.playingBuilder,
-  });
-
-  final Widget Function(BuildContext context, ApbPlayableAudio audio)
-  startUpBuilder;
-  final Widget Function(BuildContext context, ApbPlayableAudio audio)
-  loadingBuilder;
-  final Widget Function(
-    BuildContext context,
-    ApbPlayablePlaylist playlist,
-    ApbPlayableAudio audio,
-  )
-  playingBuilder;
-
-  @override
-  Widget build(BuildContext context) {
-    return ApbActiveStreamBuilder(
-      loadingBuilder: (context, psStream, playlist, loadingAudio) {
-        return loadingBuilder(context, loadingAudio);
-      },
-      defaultBuilder: (BuildContext context) {
-        return SizedBox.shrink();
-      },
-      startUpBuilder: (context, audio) => startUpBuilder(context, audio),
-      playingBuilder: (context, psStream, playlist, playingAudio) {
-        return playingBuilder(context, playlist, playingAudio);
-      },
-      errorBuilder: (context) => SizedBox.shrink(),
-      stoppedBuilder: (context) => SizedBox.shrink(),
-    );
-  }
-}
-

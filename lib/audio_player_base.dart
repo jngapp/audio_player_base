@@ -19,6 +19,7 @@ export 'src/wrapper/wrapper.dart';
 export 'src/bloc_provider/bloc_provider.dart';
 export 'package:just_audio/just_audio.dart';
 export 'src/bloc/bloc.dart';
+export 'package:just_audio_background/just_audio_background.dart' show MediaItem;
 
 typedef ApbAudioPositionTrackerCallback =
     void Function(String audioId, Duration position, Duration duration);

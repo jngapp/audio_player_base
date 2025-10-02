@@ -121,3 +121,37 @@ class ApbPlayingOrNotStreamBuilder extends StatelessWidget {
     );
   }
 }
+
+class ApbPlayerStreamBuilder extends StatelessWidget {
+  const ApbPlayerStreamBuilder(
+      {super.key, required this.playingBuilder, this.startupBuilder});
+
+  final Widget Function(BuildContext context, ApbPlayableAudio audio, ApbPlayablePlaylist playlist) playingBuilder;
+  final Widget Function(BuildContext context, ApbPlayableAudio startupAudio)? startupBuilder;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ApbPlayerBloc, ApbPlayerState>(
+      builder: (context, state) {
+        if (state.status == ApbPlayerStateStatus.playing ||
+            state.status == ApbPlayerStateStatus.loading) {
+          return ApbCustomStreamBuilder<int>(
+              defaultBuilder: (context) => SizedBox.shrink(),
+              stream: state.playerStream!.currentIndexStream,
+              itemBuilder: (context, currentIndex) {
+                final currentAudio = state.playlist!.audios![currentIndex];
+                return playingBuilder(context, currentAudio, state.playlist!);
+              }
+          );
+        }
+        else if (state.status == ApbPlayerStateStatus.startUp) {
+          return startupBuilder?.call(context, state.initialAudio!) ??
+              SizedBox.shrink();
+        }
+        else {
+          return SizedBox.shrink();
+        }
+      },
+    );
+  }
+}

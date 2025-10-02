@@ -41,6 +41,8 @@ class ApbPlayerStateStream {
   Stream<bool> get hasPreviousStream => audioPlayer.hasPreviousStream;
   Stream<bool> get shuffleModeEnabledStream => audioPlayer.shuffleModeEnabledStream;
   Stream<List<int>> get shuffleIndicesStream => audioPlayer.shuffleIndicesStream;
+  Stream<bool> get playingStream => audioPlayer.playingStream;
+  Stream<ProcessingState> get processingStateStream => audioPlayer.processingStateStream;
   Stream<ApbPlayerProgressState?> get progressStateStream => Rx.combineLatest2(positionStream, durationStream, (position, duration) {
     if(duration == null) {
       return ApbPlayerProgressState(duration: null, position: null, progress: null);

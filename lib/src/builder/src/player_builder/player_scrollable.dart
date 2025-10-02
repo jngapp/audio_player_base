@@ -3,14 +3,10 @@ part of 'player_builder.dart';
 class ApbScrollablePlayer extends StatefulWidget {
   const ApbScrollablePlayer({
     super.key,
-    required this.audio,
-    required this.playlist,
     required this.playerBuilderConfig,
 
   });
 
-  final ApbPlayableAudio audio;
-  final ApbPlayablePlaylist playlist;
   final ApbPlayerBuilderConfig playerBuilderConfig;
 
   @override
@@ -41,12 +37,10 @@ class _ApbScrollablePlayerState extends State<ApbScrollablePlayer> {
                 curve: Curves.easeOut,
               );
             },
-            child: ApbMiniPlayer(audio: widget.audio),
+            child: ApbMiniPlayer(),
           );
         } else {
           return ApbFullPlayer(
-            audio: widget.audio,
-            playlist: widget.playlist,
             controller: controller,
             playerBuilderConfig: widget.playerBuilderConfig,
           );
