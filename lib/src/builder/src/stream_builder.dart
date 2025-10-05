@@ -124,9 +124,10 @@ class ApbPlayingOrNotStreamBuilder extends StatelessWidget {
 
 class ApbPlayerStreamBuilder extends StatelessWidget {
   const ApbPlayerStreamBuilder(
-      {super.key, required this.playingBuilder, this.startupBuilder});
+      {super.key, required this.playingBuilder, this.startupBuilder, this.defaultBuilder});
 
   final Widget Function(BuildContext context, ApbPlayableAudio audio, ApbPlayablePlaylist playlist) playingBuilder;
+  final Widget Function(BuildContext context)? defaultBuilder;
   final Widget Function(BuildContext context, ApbPlayableAudio startupAudio)? startupBuilder;
 
   @override
@@ -149,7 +150,7 @@ class ApbPlayerStreamBuilder extends StatelessWidget {
               SizedBox.shrink();
         }
         else {
-          return SizedBox.shrink();
+          return defaultBuilder?.call(context) ?? SizedBox.shrink();
         }
       },
     );
