@@ -101,7 +101,6 @@
       "name": "aio_image_provider",
       "version": "0.0.1",
       "dependencies": [
-        "cached_network_image",
         "crypto",
         "equatable",
         "file_picker",
@@ -773,6 +772,14 @@
       ]
     },
     {
+      "name": "just_audio_platform_interface",
+      "version": "4.6.0",
+      "dependencies": [
+        "flutter",
+        "plugin_platform_interface"
+      ]
+    },
+    {
       "name": "flutter_web_plugins",
       "version": "0.0.0",
       "dependencies": [
@@ -802,14 +809,6 @@
         "flutter_web_plugins",
         "js",
         "rxdart"
-      ]
-    },
-    {
-      "name": "just_audio_platform_interface",
-      "version": "4.6.0",
-      "dependencies": [
-        "flutter",
-        "plugin_platform_interface"
       ]
     },
     {

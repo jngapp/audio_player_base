@@ -13,7 +13,6 @@ class ApbFullPlayer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ApbPlayerStreamBuilder(playingBuilder: (context, audio, playlist) {
-
       return Container(
         decoration: BoxDecoration(
           image: DecorationImage(

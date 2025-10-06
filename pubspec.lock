@@ -472,14 +472,14 @@ packages:
       path: "../../just_audio/just_audio"
       relative: true
     source: path
-    version: "0.10.2"
+    version: "0.10.5"
   just_audio_background:
     dependency: "direct main"
     description:
       path: "../../just_audio/just_audio_background"
       relative: true
     source: path
-    version: "0.0.1-beta.16"
+    version: "0.0.1-beta.17"
   just_audio_platform_interface:
     dependency: transitive
     description:

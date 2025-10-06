@@ -89,6 +89,11 @@ class ApbPlayerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ApbScrollablePlayer(playerBuilderConfig: builderConfig);
+    return ApbPlayerStreamBuilder(playingBuilder: (context, audio, playlist) {
+      return ApbScrollablePlayer(playerBuilderConfig: builderConfig);
+
+    }, startupBuilder: (context, audio) {
+      return ApbPlayerMiniWidget(audio);
+    },);
   }
 }
