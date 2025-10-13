@@ -43,7 +43,7 @@ class ApbPlayerMiniWidget extends StatelessWidget {
                   },
                 ),
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ApbImageWidget(audio: audio, size: getPixelFromPercentage(context, playerMinHeightPercentage) - 5),
                     Expanded(
@@ -53,6 +53,7 @@ class ApbPlayerMiniWidget extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
+                            SizedBox(height: 5,),
                             FlutterMarquee(height: 20, text: '${audio.name}',
                               pauseAfterRound: Duration(seconds: 3),
                               startAfter: Duration(seconds: 3),
