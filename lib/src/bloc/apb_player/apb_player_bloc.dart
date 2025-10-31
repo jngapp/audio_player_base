@@ -128,7 +128,16 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
       ApbPlayablePlaylist? selectedPlaylist;
       List<ApbPlayableAudio> tracks = [];
       int? trackIndex;
-      if(audio != null && playlist != null) {
+      if(audio is ApbYtPlayableAudio) {
+        selectedAudio = audio;
+        selectedPlaylist = ApbPlayablePlaylist(
+          name: audio.name,
+          audios: [audio],
+          id: audio.id!
+        );
+        tracks = [audio];
+      }
+      else if(audio != null && playlist != null) {
         selectedPlaylist = playlist;
         tracks = selectedPlaylist.audios ?? [];
         selectedAudio = audio;
