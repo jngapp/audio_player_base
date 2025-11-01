@@ -128,16 +128,7 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
       ApbPlayablePlaylist? selectedPlaylist;
       List<ApbPlayableAudio> tracks = [];
       int? trackIndex;
-      if(audio is ApbYtPlayableAudio) {
-        selectedAudio = audio;
-        selectedPlaylist = ApbPlayablePlaylist(
-          name: audio.name,
-          audios: [audio],
-          id: audio.id!
-        );
-        tracks = [audio];
-      }
-      else if(audio != null && playlist != null) {
+      if(audio != null && playlist != null) {
         selectedPlaylist = playlist;
         tracks = selectedPlaylist.audios ?? [];
         selectedAudio = audio;
@@ -151,7 +142,7 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
       } else if (playlist != null) {
         selectedPlaylist = playlist;
         tracks = selectedPlaylist.audios ?? [];
-        trackIndex = Random().nextInt(tracks.length - 1);
+        trackIndex = tracks.length >= 2 ? Random().nextInt(tracks.length - 1) : 0;
         selectedAudio = playlist.audios![trackIndex];
       }
       emit(
