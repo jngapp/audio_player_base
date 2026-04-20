@@ -134,7 +134,10 @@ class ApbPlayerStreamBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ApbPlayerBloc, ApbPlayerState>(
       builder: (context, state) {
-        if (state.status == ApbPlayerStateStatus.playing ||
+        if(state.shouldHide == true) {
+          return SizedBox.shrink();
+        }
+        else if (state.status == ApbPlayerStateStatus.playing ||
             state.status == ApbPlayerStateStatus.loading) {
           return ApbCustomStreamBuilder<int>(
               defaultBuilder: (context) => SizedBox.shrink(),

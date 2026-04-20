@@ -192,15 +192,15 @@ class ApbFullPlayer extends StatelessWidget {
                                       if (playerBuilderConfig.speedButton !=
                                           null)
                                         playerBuilderConfig.speedButton!,
+                                      if (playerBuilderConfig.timerButton !=
+                                          null)
+                                        playerBuilderConfig.timerButton!,
                                       if (playerBuilderConfig.loopButton !=
                                           null)
                                         playerBuilderConfig.loopButton!,
                                       if (playerBuilderConfig.shuffleButton !=
                                           null)
                                         playerBuilderConfig.shuffleButton!,
-                                      if (playerBuilderConfig.timerButton !=
-                                          null)
-                                        playerBuilderConfig.timerButton!,
                                       if (playerBuilderConfig.queueBuilder !=
                                           null)
                                         IconButton(

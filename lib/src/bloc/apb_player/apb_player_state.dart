@@ -10,10 +10,14 @@ class ApbPlayerState extends Equatable {
   final LoopMode loopMode;
   final bool shuffleModeEnabled ;
   final double speed;
-  const ApbPlayerState({this.status, this.initialAudio, this.playlist, this.playerStream, this.loopMode = LoopMode.off, this.shuffleModeEnabled = false, this.speed = 1.0, });
+  final bool shouldHide;
+
+  const ApbPlayerState(
+      {this.status, this.initialAudio, this.playlist, this.playerStream, this.loopMode = LoopMode
+          .off, this.shuffleModeEnabled = false, this.speed = 1.0, this.shouldHide = false });
 
   @override
-  List<Object?> get props => [status, initialAudio, playerStream, playlist, loopMode, shuffleModeEnabled, speed];
+  List<Object?> get props => [status, initialAudio, playerStream, playlist, loopMode, shuffleModeEnabled, speed, shouldHide];
 
   ApbPlayerState copyWith({
     ApbPlayerStateStatus? status,
@@ -22,7 +26,8 @@ class ApbPlayerState extends Equatable {
     ApbPlayerStateStream? playerStream,
     LoopMode? loopMode,
     bool? shuffleModeEnabled,
-    double? speed
+    double? speed,
+    bool? shouldHide,
   }) {
     return ApbPlayerState(
       status: status ?? this.status,
@@ -31,7 +36,8 @@ class ApbPlayerState extends Equatable {
       playerStream: playerStream ?? this.playerStream,
       loopMode: loopMode ?? this.loopMode,
       shuffleModeEnabled: shuffleModeEnabled ?? this.shuffleModeEnabled,
-      speed: speed ?? this.speed
+      speed: speed ?? this.speed,
+      shouldHide: shouldHide ?? this.shouldHide,
     );
   }
 }

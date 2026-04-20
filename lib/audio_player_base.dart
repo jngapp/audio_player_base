@@ -126,7 +126,7 @@ class AudioPlayerBase {
     GetIt.I<ApbPlayerBloc>().add(ApbPlayCustomSourceEvent(audio: audio, playlist: playlist));
   }
 
-  static void playPlaylist(ApbPlayablePlaylist playlist, {bool shouldShuffle = false}) {
+  static void playPlaylist(ApbPlayablePlaylist playlist, {bool shouldShuffle = false, LoopMode? loopMode}) {
     GetIt.I<ApbPlayerBloc>().add(ApbPlayPlaylistEvent(playlist, shuffle: shouldShuffle));
   }
 
@@ -151,6 +151,10 @@ class AudioPlayerBase {
   }
   static void toggleShuffle() {
     GetIt.I<ApbPlayerBloc>().add(ApbToggleShuffleEvent());
+  }
+
+  static void setLoopMode(LoopMode loopMode) {
+    GetIt.I<ApbPlayerBloc>().add(ApbSetLoopModeEvent(loopMode));
   }
 
   String get saveDirectory {

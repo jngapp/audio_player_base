@@ -82,6 +82,13 @@ class ApbToggleLoopEvent extends ApbPlayerEvent {
   List<Object?> get props => [loopMode];
 }
 
+class ApbSetLoopModeEvent extends ApbPlayerEvent {
+  final LoopMode loopMode;
+  const ApbSetLoopModeEvent(this.loopMode);
+  @override
+  List<Object?> get props => [loopMode];
+}
+
 class ApbToggleShuffleEvent extends ApbPlayerEvent {
   const ApbToggleShuffleEvent();
 }

@@ -31,6 +31,7 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
     on<ApbPrevEvent>(_onPrev);
     on<ApbToggleSpeedEvent>(_onToggleSpeed);
     on<ApbToggleLoopEvent>(_onToggleLoop);
+    on<ApbSetLoopModeEvent>(_onSetLoopMode);
     on<ApbReplayEvent>(_onReplay);
     on<ApbToggleShuffleEvent>(_onToggleShuffle);
     on<ApbInitStartUpEvent>(_onInitStartUp);
@@ -45,7 +46,7 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
       ApbPlayCustomSourceEvent event,
     Emitter<ApbPlayerState> emit,
   ) async {
-    await _handlePlay(emit, audio: event.audio, playlist: event.playlist);
+    await _handlePlay(emit, audio: event.audio, playlist: event.playlist, loopMode: LoopMode.one, shouldHide: true);
   }
 
   Future<void> _onAddAudio(
@@ -108,8 +109,11 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
     ApbPlayableAudio? audio,
     ApbPlayablePlaylist? playlist,
     bool shouldShuffle = false,
+    LoopMode? loopMode,
+    bool shouldHide = false,
   }) async {
     try {
+      emit(state.copyWith(shouldHide: shouldHide));
       await _audioPlayerService.init();
       if(shouldShuffle) {
         await _audioPlayerService.audioPlayer!.setShuffleModeEnabled(true);
@@ -119,8 +123,14 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
           state.shuffleModeEnabled,
         );
       }
-      _audioPlayerService.audioPlayer!.setLoopMode(state.loopMode);
-      _audioPlayerService.audioPlayer!.setSpeed(state.speed);
+      if(loopMode != null) {
+        await _audioPlayerService.audioPlayer!.setLoopMode(loopMode);
+      }
+      else {
+        _audioPlayerService.audioPlayer!.setLoopMode(state.loopMode);
+        _audioPlayerService.audioPlayer!.setSpeed(state.speed);
+      }
+
 
       final playerStream = _audioPlayerService.psStream!;
       emit(state.copyWith(playerStream: playerStream));
@@ -260,6 +270,14 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
 
   Future<void> _onToggleLoop(
     ApbToggleLoopEvent event,
+    Emitter<ApbPlayerState> emit,
+  ) async {
+    await _audioPlayerService.audioPlayer!.setLoopMode(event.loopMode);
+    emit(state.copyWith(loopMode: event.loopMode));
+  }
+
+  Future<void> _onSetLoopMode(
+    ApbSetLoopModeEvent event,
     Emitter<ApbPlayerState> emit,
   ) async {
     await _audioPlayerService.audioPlayer!.setLoopMode(event.loopMode);
