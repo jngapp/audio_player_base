@@ -90,8 +90,8 @@ class _ApbReactiveProgressWidgetState extends State<ApbReactiveProgressWidget> {
           onSeek: (value) {
             context.read<ApbPlayerBloc>().add(ApbSeekEvent(value));
           },
-          thumbRadius: isDragging ? 10 : 7,
-          barHeight: isDragging ? 8 : 5,
+          thumbRadius: 9,
+          barHeight: 8,
           onDragStart: (details) {
             setState(() {
               isDragging = true;
