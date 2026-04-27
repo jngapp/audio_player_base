@@ -79,31 +79,86 @@ class ApbReactiveProgressWidget extends StatefulWidget {
 
 class _ApbReactiveProgressWidgetState extends State<ApbReactiveProgressWidget> {
   bool isDragging = false;
+  Duration? dragPosition;
 
   @override
   Widget build(BuildContext context) {
     return ApbProgressWidget(
       playingBuilder: (context, progress, duration, position) {
-        return ProgressBar(
-          progress: position ?? Duration.zero,
-          total: duration ?? Duration.zero,
-          onSeek: (value) {
-            context.read<ApbPlayerBloc>().add(ApbSeekEvent(value));
-          },
-          thumbRadius: 9,
-          barHeight: 8,
-          onDragStart: (details) {
-            setState(() {
-              isDragging = true;
-            });
-          },
-          onDragEnd: () {
-            setState(() {
-              isDragging = false;
-            });
-          },
-          timeLabelLocation: TimeLabelLocation.sides,
-          timeLabelType: TimeLabelType.remainingTime,
+        final currentPosition =
+            isDragging && dragPosition != null
+                ? dragPosition!
+                : (position ?? Duration.zero);
+
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              height: 30,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  if (!isDragging)
+                    SizedBox(
+                      height: 3,
+                      child: ProgressBar(
+                        progress: currentPosition,
+                        total: duration ?? Duration.zero,
+                        onSeek: null,
+                        thumbRadius: 0,
+                        barHeight: 5,
+                        timeLabelLocation: TimeLabelLocation.none,
+                        timeLabelType: TimeLabelType.remainingTime,
+                      ),
+                    ),
+                  ProgressBar(
+                    progress: currentPosition,
+                    total: duration ?? Duration.zero,
+                    onSeek: (value) {
+                      context.read<ApbPlayerBloc>().add(ApbSeekEvent(value));
+                      setState(() {
+                        dragPosition = null;
+                      });
+                    },
+                    thumbRadius: isDragging ? 10 : 7,
+                    thumbColor: isDragging ? null : Colors.transparent,
+                    thumbGlowRadius: isDragging ? 2 : 0,
+                    barHeight: isDragging ? 8 : 30,
+                    progressBarColor: isDragging ? null : Colors.transparent,
+                    baseBarColor: isDragging ? null : Colors.transparent,
+                    bufferedBarColor: isDragging ? null : Colors.transparent,
+                    onDragStart: (details) {
+                      setState(() {
+                        isDragging = true;
+                      });
+                    },
+                    onDragUpdate: (details) {
+                      setState(() {
+                        dragPosition = details.timeStamp;
+                      });
+                    },
+                    onDragEnd: () {
+                      setState(() {
+                        isDragging = false;
+                        dragPosition = null;
+                      });
+                    },
+                    timeLabelLocation: TimeLabelLocation.none,
+                    timeLabelType: TimeLabelType.remainingTime,
+                  ),
+                ],
+              ),
+            ),
+            ProgressBar(
+              progress: currentPosition,
+              total: duration ?? Duration.zero,
+              onSeek: null,
+              thumbRadius: 0,
+              barHeight: 0,
+              timeLabelLocation: TimeLabelLocation.sides,
+              timeLabelType: TimeLabelType.remainingTime,
+            ),
+          ],
         );
       },
       loadingBuilder: (context) {
